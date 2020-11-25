@@ -4,6 +4,8 @@
 #include "iob_timer.h"
 #include "iob_knn.h"
 #include "random.h" //random generator for bare metal
+#include "interconnect.h"
+#include "KNNsw_reg.h"
 
 //uncomment to use rand from C lib 
 //#define cmwc_rand rand
@@ -16,13 +18,23 @@
 #define M 4   //number samples to be classified
 #else
 #define S 12   
-#define N 100000
-#define K 10  
+#define N 10
+#define K 4  
 #define C 4  
-#define M 100 
+#define M 4
 #endif
 
 #define INFINITE ~0
+
+
+//base address
+static int base_knn;
+
+void knn_init( int base_address){
+  base_knn=base_address;
+}
+
+
 
 //
 //Data structures
@@ -30,8 +42,8 @@
 
 //labeled dataset
 struct datum {
-  short x;
-  short y;
+  unsigned short x;
+  unsigned short y;
   unsigned char label;
 } data[N], x[M];
 
@@ -63,19 +75,35 @@ void insert (struct neighbor element, unsigned int position) {
 
 }
 
+void write_test_to_reg(struct datum point){
+  int *data_out = (struct datum *) &point;
+  IO_SET(base_knn,TEST_POINT,data_out);
+}
+
+void write_data_to_reg(struct datum point){
+  int *data_out = (struct datum *) &point;
+  IO_SET(base_knn,DATA_POINT,data_out);
+}
+
+
+
 
 ///////////////////////////////////////////////////////////////////
 int main() {
 
-  unsigned long long elapsed;
-  unsigned int elapsedu;
+
+  unsigned long long elapsed=0;
+  unsigned int elapsedu=0;
 
   //init uart and timer
   uart_init(UART_BASE, FREQ/BAUD);
   uart_printf("\nInit timer\n");
   uart_txwait();
 
-  timer_init(TIMER_BASE);
+  timer_reset(TIMER_BASE);
+
+
+
   //read current timer count, compute elapsed time
   //elapsed  = timer_get_count();
   //elapsedu = timer_time_us();
@@ -124,6 +152,8 @@ int main() {
   //
 
   //start knn here
+  knn_init(KNN_BASE);
+  timer_init(TIMER_BASE);
   
   for (int k=0; k<M; k++) { //for all test points
   //compute distances to dataset points
@@ -135,13 +165,17 @@ int main() {
     //init all k neighbors infinite distance
     for (int j=0; j<K; j++)
       neighbor[j].dist = INFINITE;
+      write_test_to_reg(x[k]);
 
 #ifdef DEBUG
     uart_printf("Datum \tX \tY \tLabel \tDistance\n");
 #endif
     for (int i=0; i<N; i++) { //for all dataset points
       //compute distance to x[k]
-      unsigned int d = sq_dist(x[k], data[i]);
+
+      write_data_to_reg(data[i]);
+      unsigned int d = (unsigned int) IO_GET(base_knn, DIST);
+      //unsigned int d = sq_dist(x[k], data[i]);
 
       //insert in ordered list
       for (int j=0; j<K; j++)
@@ -156,7 +190,6 @@ int main() {
 #endif
 
     }
-
     
     //classify test point
 
@@ -193,8 +226,9 @@ int main() {
 
   //stop knn here
   //read current timer count, compute elapsed time
-  elapsedu = timer_time_us(TIMER_BASE);
+  elapsedu=timer_time_us(TIMER_BASE);
   uart_printf("\nExecution time: %dus @%dMHz\n\n", elapsedu, FREQ/1000000);
+
 
   
   //print classification distribution to check for statistical bias

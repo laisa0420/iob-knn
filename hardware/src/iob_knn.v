@@ -34,7 +34,10 @@ module iob_knn
      (
       .KNN_ENABLE(KNN_ENABLE),
       .clk(clk),
-      .rst(rst_int)
+      .rst(rst_int),
+      .A(TEST_POINT),
+      .B(DATA_POINT),
+      .D(DIST)
       );
    
    
