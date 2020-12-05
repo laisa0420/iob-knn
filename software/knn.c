@@ -165,7 +165,7 @@ int main() {
     //init all k neighbors infinite distance
     for (int j=0; j<K; j++)
       neighbor[j].dist = INFINITE;
-      write_test_to_reg(x[k]);
+      //write_test_to_reg(x[k]);
 
 #ifdef DEBUG
     uart_printf("Datum \tX \tY \tLabel \tDistance\n");
@@ -173,9 +173,9 @@ int main() {
     for (int i=0; i<N; i++) { //for all dataset points
       //compute distance to x[k]
 
-      write_data_to_reg(data[i]);
-      unsigned int d = (unsigned int) IO_GET(base_knn, DIST);
-      //unsigned int d = sq_dist(x[k], data[i]);
+      //write_data_to_reg(data[i]);
+      //unsigned int d = (unsigned int) IO_GET(base_knn, DIST);
+      unsigned int d = sq_dist(x[k], data[i]);
 
       //insert in ordered list
       for (int j=0; j<K; j++)
