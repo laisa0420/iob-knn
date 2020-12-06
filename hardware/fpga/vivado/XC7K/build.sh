@@ -1,4 +1,4 @@
-#bin/bash
+#!/usr/bin/bash
 TOP_MODULE="iob_knn"
 echo $PATH
 export XILINXPATH=/tools/Xilinx

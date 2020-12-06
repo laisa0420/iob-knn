@@ -1,0 +1,30 @@
+#-----------------------------------------------------------
+# Vivado v2019.2 (64-bit)
+# SW Build 2708876 on Wed Nov  6 21:39:14 MST 2019
+# IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
+# Start of session at: Sun Dec  6 17:18:59 2020
+# Process ID: 15067
+# Current directory: /home/marcio/Documents/ecomp/laisaKNN/submodules/KNN/hardware/fpga/vivado/XC7K
+# Command line: vivado -nojournal -log vivado.log -mode batch -source ../knn.tcl -tclargs iob_knn ../../../../hardware/src/knn.v ../../../../hardware/src/iob_knn.v ../../../../hardware/include ../../../../submodules/LIB/hardware/include ../../../../submodules/INTERCON/hardware/include  DATA_W=32 XC7K325T
+# Log file: /home/marcio/Documents/ecomp/laisaKNN/submodules/KNN/hardware/fpga/vivado/XC7K/vivado.log
+# Journal file: 
+#-----------------------------------------------------------
+source ../knn.tcl
+# set TOP [lindex $argv 0]
+# set PART [lindex $argv 4]
+# set VSRC [lindex $argv 1]
+# set HW_INCLUDE [lindex $argv 2]
+# set HW_DEFINE [lindex $argv 3]
+# puts $VSRC
+../../../../hardware/src/knn.v ../../../../hardware/src/iob_knn.v
+# foreach file [split $VSRC \ ] {
+#     puts $file
+#     if {$file != "" && $file != " " && $file != "\n"} {
+#         read_verilog -sv $file
+#     }
+# }
+../../../../hardware/src/knn.v
+../../../../hardware/src/iob_knn.v
+# set_property part $PART [current_project]
+ERROR: [Common 17-69] Command failed: Part 'XC7K325T' not found
+INFO: [Common 17-206] Exiting Vivado at Sun Dec  6 17:19:06 2020...
