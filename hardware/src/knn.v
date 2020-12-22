@@ -1,84 +1,123 @@
 `timescale 1ns/1ps
 `include "iob_lib.vh"
 
-module knn_core
-  #(
-    parameter DATA_W = 40,
+
+//Module to compute distances
+module calc_distances 
+    #(
+    parameter DATA_W = 32,
     parameter K=4,
     parameter S=16,
     parameter N=10
     )
-   (
-    `INPUT(KNN_ENABLE, 1),    
-    `INPUT(clk, 1),
-    `INPUT(rst, 1),
-    `INPUT(T_point, DATA_W),
-    `INPUT(D_point1, DATA_W),
-    `INPUT(D_point2, DATA_W),
-    `INPUT(D_point3, DATA_W),
-    `INPUT(D_point4, DATA_W),
-    `INPUT(D_point5, DATA_W),
-    `INPUT(D_point6, DATA_W),
-    `INPUT(D_point7, DATA_W),
-    `INPUT(D_point8, DATA_W),
-    `INPUT(D_point9, DATA_W),
-    `INPUT(D_point10, DATA_W),
-    `OUTPUT(D, DATA_W)   
+    (
+     `INPUT(test_point, DATA_W),
+     `INPUT(data_point, DATA_W),
+     `OUTPUT(dist, DATA_W)
     );
-    
-    
-    `SIGNAL(data,N*DATA_W)
-    `SIGNAL(reg_in,N*DATA_W)
-    `SIGNAL(X,S)    
+
+    //Auxiliary signals
+    `SIGNAL(X,S)
     `SIGNAL(Y,S)
-    `SIGNAL(X2,DATA_W)    
+    `SIGNAL(X2,DATA_W)
     `SIGNAL(Y2,DATA_W)
-    `SIGNAL(d_int,DATA_W)
-    `SIGNAL(cnt_data, 4)
-    
-    //Signal to have all data points
-    `SIGNAL(All_data,10*DATA_W)
-    
-    //Neighbours signal
-    `SIGNAL(neighbours_in,K*DATA_W)
-    `SIGNAL(neighbours_out,K*DATA_W)
-    
-    `SWREG_W(d, DATA_W, 1'b0)
-    `SIGNAL2OUT(D,d_int)
-    
-    `COUNTER_RE(clk, rst, (en & cnt1!=N), cnt_data+DATA_W)
-    `COUNTER_RE(clk, rst, (en & cnt1!=N), cnt_n+DATA_W)
-    
-    //Put all data points in one register
-    assign All_data={D_point1,D_point2,D_point3,D_point4,D_point5,D_point6,D_point7,D_point8,D_point9,D_point10};
-    `REG_RE(clk, rst, 1'b0, 1, data_out, All_data)
-    
-    assign neighbours_in=(DATA_W*K)'b1;
-    `REG_RE(clk, rst, 1'b0, 1, neighbours_out, neighbours_in)
-    
-    
-    
-    
+
+    //Output signal conversion
+    `SIGNAL(D,DATA_W)
+
+
     `COMB begin
-    	X=T_point[32:16]-data_out[cnt_data+32:cnt_data+16];
-    	X2=X*X;
-    	Y=T_point[15:0]-data_out[cnt_data+15:cnt_data];
-    	Y2=Y*Y;
-    	d_int=X2+Y2;
-    	
-    	
-    	always @(posedge CLK, posedge cnt_n){	
-    	   if (d_int < neighbours_out[cnt_n+15:cnt_n])
-    	      neighbours_out[cnt_n+15:0] >> DATA_W;
-    	      neighbours_out[cnt_n+15:cnt_n]=
-    	         
-    	}
-    	
-    	
+        X = test_point[31:15]- data_point[31:15];
+        X2 = X*X;
+        Y = test_point[15:0]- data_point[15:0];
+        Y2 = Y*Y;
+        D = X2 + Y2;
     end
-    
 
-
-      
 endmodule
 
+
+
+module calc_insert
+    #(  
+    parameter DATA_W = 32,
+    parameter K=4,
+    parameter S=16,
+    parameter N=10
+    )
+    (
+     `INPUT(test_point, DATA_W),
+     `INPUT(data_point, DATA_W),
+     `INPUT(clk, 1),
+     `INPUT(rst, 1),
+     `INPUT(enable, 1),
+     `OUTPUT(neigbours, )
+    );
+
+
+
+    reg [DATA_W-1:0] neighregin [K-1:0];
+    reg [DATA_W-1:0] neighregout [K-1:0];
+    wire [DATA_W-1:0] neighwireout [K-1:0];
+
+    `SIGNAL_OUT(distance, DATA_W)
+    `SIGNAL_OUT(compout, DATA_W)
+    `SIGNAL_OUT(compout1, DATA_W)
+
+
+    calc_distances dists (test_point, data_point,distance);    
+
+
+    genvar i;   
+    genvar j;   
+
+    generate    
+        for (i = 0; i < K; i = i + 1) 
+            begin 
+                generate
+                    for (j = K-1; j = 0 ; j = j-1) begin
+                        comparator comp(neighbours[i],neigbours[i+1],compout[i]);
+                    end
+                endgenerate
+            end
+        end
+    endgenerate
+
+    generate    
+        for (j = K-1; j = 0 ; j = j-1)
+            begin 
+                generate
+                    for (i = 0; i < K; i = i + 1) begin
+                        comparator comp(neighbours[i],neigbours[i+1],compout[i]);
+                    end
+                endgenerate
+            end
+            comparator comp1(compout[i],compout[i+1],compout1[i]);
+        end
+    endgenerate
+
+
+    
+
+
+
+
+endmodule
+
+module comparator
+    #(
+    parameter DATA_W = 32,
+    parameter K=4,
+    parameter S=16,
+    parameter N=10
+    )
+    (
+     `INPUT(A, DATA_W),
+     `INPUT(B, DATA_W),
+     `OUTPUT(C, DATA_W)
+    );
+
+    `COMB C = (A>B?A:B);
+    
+
+endmodule
