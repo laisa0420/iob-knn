@@ -9,10 +9,11 @@ module calc_distances
     parameter K=4,
     parameter S=16,
     parameter N=10
+    parameter data_info=40
     )
     (
      `INPUT(test_point, DATA_W),
-     `INPUT(data_point, DATA_W),
+     `INPUT(data_point, data_info),
      `OUTPUT(dist, DATA_W)
     );
 
@@ -25,11 +26,11 @@ module calc_distances
     //Output signal conversion
     `SIGNAL(D,DATA_W)
 
-
+   
     `COMB begin
-        X = test_point[31:15]- data_point[31:15];
+        X = test_point[DATA_W-1:15] - data_point[data_info-1:data_info-S-1];
         X2 = X*X;
-        Y = test_point[15:0]- data_point[15:0];
+        Y = test_point[15:0]- data_point[data_info-S-2:8];
         Y2 = Y*Y;
         D = X2 + Y2;
     end
@@ -44,23 +45,29 @@ module calc_insert
     parameter K=4,
     parameter S=16,
     parameter N=10
+    parameter data_info=40
     )
     (
      `INPUT(test_point, DATA_W),
-     `INPUT(data_point, DATA_W),
+     `INPUT(data_point, data_info),
      `INPUT(clk, 1),
      `INPUT(rst, 1),
      `INPUT(enable, 1),
-     `OUTPUT(neigbours, )
+     `OUTPUT(neigbours, data_info)
     );
 
 
 
-    reg [DATA_W-1:0] neighregin [K-1:0];
-    reg [DATA_W-1:0] neighregout [K-1:0];
-    wire [DATA_W-1:0] neighwireout [K-1:0];
+    reg [data_info-1:0] neighregin [K-1:0];
+    reg [data_info-1:0] neighregout [K-1:0];
+    wire [data_info-1:0] neighwireout [K-1:0];
+
+
+    `SIGNAL_OUT(en_neigh, 1)
 
     `SIGNAL_OUT(distance, DATA_W)
+
+
     `SIGNAL_OUT(compout, DATA_W)
     `SIGNAL_OUT(compout1, DATA_W)
 
@@ -68,38 +75,17 @@ module calc_insert
     calc_distances dists (test_point, data_point,distance);    
 
 
-    genvar i;   
-    genvar j;   
+    always @(posedge clk) begin
+        for (i = 0; i < K && en_neigh == 0; i = i + 1) 
+            begin
+                comparator comp(distance,neighregout[i],en_neigh); 
+                neighregin[K-1:i+1] = neighregin[K-2:i];
+                neighregin[i] = {distance,data_point[7:0]}    
 
-    generate    
-        for (i = 0; i < K; i = i + 1) 
-            begin 
-                generate
-                    for (j = K-1; j = 0 ; j = j-1) begin
-                        comparator comp(neighbours[i],neigbours[i+1],compout[i]);
-                    end
-                endgenerate
             end
-        end
-    endgenerate
+    end
 
-    generate    
-        for (j = K-1; j = 0 ; j = j-1)
-            begin 
-                generate
-                    for (i = 0; i < K; i = i + 1) begin
-                        comparator comp(neighbours[i],neigbours[i+1],compout[i]);
-                    end
-                endgenerate
-            end
-            comparator comp1(compout[i],compout[i+1],compout1[i]);
-        end
-    endgenerate
-
-
-    
-
-
+    `REG_RE(clk, rst, '1', en_neigh, neighregout ,neighregin)
 
 
 endmodule
@@ -109,15 +95,16 @@ module comparator
     parameter DATA_W = 32,
     parameter K=4,
     parameter S=16,
-    parameter N=10
+    parameter N=10,
+    parameter data_info=40
     )
     (
      `INPUT(A, DATA_W),
-     `INPUT(B, DATA_W),
+     `INPUT(B, data_info),
      `OUTPUT(C, DATA_W)
     );
 
-    `COMB C = (A>B?A:B);
+    `COMB C = (A<B[data_info-1:data_info-DATA_W-1]?1:0);
     
 
 endmodule
