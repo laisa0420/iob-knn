@@ -76,51 +76,54 @@ module calc_insert
      `INPUT(clk, 1),
      `INPUT(rst, 1),
      `INPUT(enable, 1),
-     `OUTPUT(neighbours, data_info)
+     `INPUT(en_tp, 1),
+     `INPUT(en_dp, 1),
+     `INPUT(en_dist, 1),
+     `INPUT(en_nb, 1),
+     `OUTPUT(insert, 1)
     );
 
 
 
-    reg [data_info-1:0] neighregin [K-1:0];
-    reg [data_info-1:0] neighregout [K-1:0];
-    wire [data_info-1:0] neighwireout [K-1:0];
-
-
-    `SIGNAL_OUT(en_neigh, 1)
-    `SIGNAL(en_neigh_reg, 1)
-
-    assign en_neigh_reg = 'b0;
-    assign en_neigh = en_neigh_reg;
-
+    reg [data_info-1:0] nbregin [K-1:0];
+    reg [data_info-1:0] nbregout [K-1:0];
+    wire [data_info-1:0] nbwireout [K-1:0];
 
     
     `SIGNAL(cnt, S)
 
-    `SIGNAL_OUT(distance, DATA_W)
+    `SIGNAL(dist_out, DATA_W)
+    `SIGNAL_OUT(dist_in, DATA_W)
 
-
-    `SIGNAL_OUT(compout, DATA_W)
-    `SIGNAL_OUT(compout1, DATA_W)
-
-    `REG_RE(clk, rst, 'b1, en_neigh, neighregout[cnt],neighregin[cnt])
+    `SIGNAL(tp_in, DATA_W)
+    `SIGNAL(tp_out, DATA_W)
     
-    `COUNTER_RE(clk, rst, en_neigh != 'b1, cnt)
+    `SIGNAL(dp_in, data_info)
+    `SIGNAL(dp_out, data_info
 
-    calc_distances dists (test_point, data_point, distance);    
+    `REG_RE(clk, rst, 'b1, en_tp, tp_out,tp_in)
+    `REG_RE(clk, rst, 'b1, en_dp, dp_out,dp_in)
+    `REG_RE(clk, rst, 'b1, en_nb, nbregout[cnt],nbregin[cnt])
+    `REG_RE(clk, rst, 'b0, en_dist, dist_out,dist_in)
+
+    
+    `COUNTER_RE(clk, rst, en_nb != 'b1, cnt)
+
+    calc_distances dists (test_point, dp_out, dist_in);    
 
 
-    comparator comp (distance,neighregout[cnt],en_neigh);
+    comparator comp (dist_out,nbregout[cnt],insert);
     integer i;
 
 
     `COMB begin    
 
 
-        if (en_neigh == 1) begin 
+        if (en_nb == 1) begin 
             for (i = K-1; i > cnt ; i = i-1) begin
-            neighregin[i] = neighregin[i-1];
+            nbregin[i] = nbregin[i-1];
             end
-            neighregin[cnt] = {distance,data_point[7:0]};
+            nbregin[cnt] = {dist_out,dp_out[7:0]};
         end
     end
 
