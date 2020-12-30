@@ -7,7 +7,9 @@ module iob_knn
   #(
     parameter ADDR_W = `KNN_ADDR_W, //NODOC Address width
     parameter DATA_W = `DATA_W, //NODOC Data word width
-    parameter WDATA_W = `KNN_WDATA_W //NODOC Data word width on writes
+    parameter WDATA_W = `KNN_WDATA_W, //NODOC Data word width on writes
+    parameter K = 4,
+    parameter data_info = 40
     )
    (
 `include "cpu_nat_s_if.v"
@@ -26,27 +28,23 @@ module iob_knn
    `SIGNAL(write, 1) 
    `COMB write = | wstrb;
 
+   `SIGNAL_OUT(nb_list,K*data_info)
    //
    //BLOCK 64-bit time counter & Free-running 64-bit counter with enable and soft reset capabilities
    //
-   `SIGNAL_OUT(KNN_VALUE, 2*DATA_W)
-   knn_core knn0
+   //`SIGNAL_OUT(KNN_VALUE, 2*DATA_W)
+
+   top_circuit knn
      (
-      .KNN_ENABLE(KNN_ENABLE),
       .clk(clk),
-      .rst(rst_int),
-      .T_POINT(T_POINT),
-      .D_POINT1(D_POINT1),
-      .D_POINT2(D_POINT2),
-      .D_POINT3(D_POINT3),
-      .D_POINT4(D_POINT4),
-      .D_POINT5(D_POINT5),
-      .D_POINT6(D_POINT6),
-      .D_POINT7(D_POINT7),
-      .D_POINT8(D_POINT8),
-      .D_POINT9(D_POINT9),
-      .D_POINT10(D_POINT10),
-      .NB(NB)
+      .rst(KNN_RESET),
+      .test_point(TESTP),
+      .data_point(DATAP_REG), 
+      .label(LABEL_REG),
+      .enable(KNN_ENABLE),
+      .valid(valid),
+      .wstrb(wstrb),
+      .nb_list(nb_list)
       );
    
    

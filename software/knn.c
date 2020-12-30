@@ -22,6 +22,7 @@
 #define K 4  
 #define C 4  
 #define M 4
+#define TP_ULIMIT 50 //simas --50 basys3||200 placa
 #endif
 
 #define INFINITE ~0
@@ -35,7 +36,6 @@ void knn_init( int base_address){
 }
 
 
-
 //
 //Data structures
 //
@@ -46,6 +46,7 @@ struct datum {
   unsigned short y;
   unsigned char label;
 } data[N], x[M];
+
 
 //neighbor info
 struct neighbor {
@@ -75,6 +76,7 @@ void insert (struct neighbor element, unsigned int position) {
 
 }
 
+/*
 void write_test_to_reg(struct datum point){
   int *data_out = (struct datum *) &point;
   IO_SET(base_knn,TEST_POINT,data_out);
@@ -83,12 +85,9 @@ void write_test_to_reg(struct datum point){
 void write_data_to_reg(struct datum point){
   int *data_out = (struct datum *) &point;
   IO_SET(base_knn,DATA_POINT,data_out);
-}
+}*/
 
 
-
-
-///////////////////////////////////////////////////////////////////
 int main() {
 
 
@@ -154,44 +153,48 @@ int main() {
   //start knn here
   knn_init(KNN_BASE);
   timer_init(TIMER_BASE);
-  
-  for (int k=0; k<M; k++) { //for all test points
-  //compute distances to dataset points
+  int k=0;
+  int* data_IOSET;
+
+  //for (k=0; k<M; k+= TP_ULIMIT){ //Tem o index do bloco de 50 TestPoints || bloco50[0] -- bloco50[1] (...)
 
 #ifdef DEBUG
     uart_printf("\n\nProcessing x[%d]:\n", k);
 #endif
 
-    //init all k neighbors infinite distance
-    for (int j=0; j<K; j++)
-      neighbor[j].dist = INFINITE;
-      //write_test_to_reg(x[k]);
-
 #ifdef DEBUG
     uart_printf("Datum \tX \tY \tLabel \tDistance\n");
 #endif
-    for (int i=0; i<N; i++) { //for all dataset points
-      //compute distance to x[k]
+    //knn_reset //AKA fzr reset no hardware
 
-      //write_data_to_reg(data[i]);
-      //unsigned int d = (unsigned int) IO_GET(base_knn, DIST);
-      unsigned int d = sq_dist(x[k], data[i]);
 
-      //insert in ordered list
-      for (int j=0; j<K; j++)
-        if ( d < neighbor[j].dist ) {
-          insert( (struct neighbor){i,d}, j);
-          break;
-        }
+    //Mandar 1 bloco de 50 TPoints
+   /* for (int i = 0; i < M && i < TP_ULIMIT ; i++){
+        int offset = i+k;
+        targetADDR = BANK_REG0 + offset;
+        *data_IOSET = (struct datum *) &(x[offset]);
+        IO_SET(base, targetADDR, data_IOSET); // XY concatenado ->ver VIP
+    }*/
 
-#ifdef DEBUG
-      //dataset
-      uart_printf("%d \t%d \t%d \t%d \t%d\n", i, data[i].x, data[i].y, data[i].label, d);
-#endif
+    IO_SET(base_knn, KNN_RESET, 1);
 
+    data_IOSET = (struct datum *) &(x[0]);
+    IO_SET(base_knn, TESTP, data_IOSET);
+
+    IO_SET(base_knn, KNN_RESET, 0);
+
+    //knn_start -- provavelmente distribuir do banco de registos para cada modulo
+
+    IO_SET(base_knn, KNN_ENABLE, 1);
+
+    //Mandar 1 dataPoint de cada vez
+    for(int d = 0; d<N; d++){
+        //ver a questão do label no hardware
+        data_IOSET = (struct datum *) &(data[d]);
+        IO_SET(base_knn,DATAP_REG,data_IOSET); // X Y LABEL lim 32 bits
+        data_IOSET = (unsigned char*) &(data[d].label);
+        IO_SET(base_knn,LABEL_REG,data_IOSET);
     }
-    
-    //classify test point
 
     //clear all votes
     int votes[C] = {0};
@@ -222,7 +225,7 @@ int main() {
 
 #endif
 
-  } //all test points classified
+  //} //all test points classified
 
   //stop knn here
   //read current timer count, compute elapsed time
