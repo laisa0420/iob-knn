@@ -1,6 +1,7 @@
 `timescale 1ns / 1ps
 `include "iob_lib.vh"
 //Module to compute distances
+
 module calc_distances 
     #(
     parameter DATA_W = 32,
@@ -12,7 +13,8 @@ module calc_distances
     (
      `INPUT(test_point, DATA_W),
      `INPUT(data_point, DATA_W),
-     `OUTPUT(dist, DATA_W)
+     //`OUTPUT(dist, DATA_W)
+     output [DATA_W-1:0] old
     );
 
     //Auxiliary signals
@@ -23,7 +25,8 @@ module calc_distances
 
     //Output signal conversion
     `SIGNAL(D,DATA_W)
-    `SIGNAL2OUT(dist, D)
+    assign old = 0;
+    //`SIGNAL2OUT(dist, D)
 
    
     `COMB begin
