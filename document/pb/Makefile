@@ -1,8 +1,8 @@
-TIMER_DIR:=../..
-CORE_DIR:=$(TIMER_DIR)
+KNN_DIR:=../..
+CORE_DIR:=$(KNN_DIR)
 
-include $(TIMER_DIR)/core.mk
+include $(KNN_DIR)/core.mk
 
-include $(TIMER_DIR)/submodules/TEX/document/document.mk
+include $(KNN_DIR)/submodules/TEX/document/document.mk
 
 clean: texclean

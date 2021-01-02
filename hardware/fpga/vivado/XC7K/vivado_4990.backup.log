@@ -1,0 +1,295 @@
+#-----------------------------------------------------------
+# Vivado v2019.2 (64-bit)
+# SW Build 2708876 on Wed Nov  6 21:39:14 MST 2019
+# IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
+# Start of session at: Sat Jan  2 16:56:29 2021
+# Process ID: 4990
+# Current directory: /home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/fpga/vivado/XC7K
+# Command line: vivado -nojournal -log vivado.log -mode batch -source ../knn.tcl -tclargs iob_knn ../../../../hardware/src/iob_knn.v ../../../../hardware/src/circuit.v ../../../../hardware/src/control_unit.v ../../../../hardware/src/top_circuit.v ../../../../hardware/include ../../../../submodules/LIB/hardware/include ../../../../submodules/INTERCON/hardware/include  DATA_W=32 xc7a35tcpg236-1
+# Log file: /home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/fpga/vivado/XC7K/vivado.log
+# Journal file: 
+#-----------------------------------------------------------
+source ../knn.tcl
+# set TOP [lindex $argv 0]
+# set PART [lindex $argv 4]
+# set VSRC [lindex $argv 1]
+# set HW_INCLUDE [lindex $argv 2]
+# set HW_DEFINE [lindex $argv 3]
+# puts $VSRC
+../../../../hardware/src/iob_knn.v ../../../../hardware/src/circuit.v ../../../../hardware/src/control_unit.v ../../../../hardware/src/top_circuit.v
+# foreach file [split $VSRC \ ] {
+#     puts $file
+#     if {$file != "" && $file != " " && $file != "\n"} {
+#         read_verilog -sv $file
+#     }
+# }
+../../../../hardware/src/iob_knn.v
+../../../../hardware/src/circuit.v
+../../../../hardware/src/control_unit.v
+../../../../hardware/src/top_circuit.v
+# set_property part $PART [current_project]
+# synth_design -include_dirs $HW_INCLUDE -verilog_define $HW_DEFINE -part $PART -top $TOP -mode out_of_context -flatten_hierarchy none -verbose
+Command: synth_design -include_dirs {../../../../hardware/include ../../../../submodules/LIB/hardware/include ../../../../submodules/INTERCON/hardware/include} -verilog_define DATA_W=32 -part xc7a35tcpg236-1 -top iob_knn -mode out_of_context -flatten_hierarchy none -verbose
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: Launching helper process for spawning children vivado processes
+INFO: Helper process launched with PID 5029 
+---------------------------------------------------------------------------------
+Starting Synthesize : Time (s): cpu = 00:00:08 ; elapsed = 00:00:11 . Memory (MB): peak = 1634.617 ; gain = 214.613 ; free physical = 146 ; free virtual = 2383
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'iob_knn' [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/iob_knn.v:6]
+	Parameter ADDR_W bound to: 3 - type: integer 
+	Parameter DATA_W bound to: 32 - type: integer 
+	Parameter WDATA_W bound to: 32 - type: integer 
+	Parameter K bound to: 4 - type: integer 
+	Parameter data_info bound to: 40 - type: integer 
+INFO: [Synth 8-6157] synthesizing module 'top_circuit' [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/top_circuit.v:5]
+	Parameter DATA_W bound to: 32 - type: integer 
+	Parameter K bound to: 4 - type: integer 
+	Parameter S bound to: 16 - type: integer 
+	Parameter N bound to: 10 - type: integer 
+	Parameter data_info bound to: 40 - type: integer 
+INFO: [Synth 8-6157] synthesizing module 'calc_insert' [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/circuit.v:64]
+	Parameter DATA_W bound to: 32 - type: integer 
+	Parameter K bound to: 4 - type: integer 
+	Parameter S bound to: 16 - type: integer 
+	Parameter N bound to: 10 - type: integer 
+	Parameter data_info bound to: 40 - type: integer 
+	Parameter C bound to: 8 - type: integer 
+INFO: [Synth 8-6157] synthesizing module 'calc_distances' [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/circuit.v:5]
+	Parameter DATA_W bound to: 32 - type: integer 
+	Parameter K bound to: 4 - type: integer 
+	Parameter S bound to: 16 - type: integer 
+	Parameter N bound to: 10 - type: integer 
+	Parameter data_info bound to: 40 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'calc_distances' (1#1) [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/circuit.v:5]
+INFO: [Synth 8-6157] synthesizing module 'comparator' [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/circuit.v:42]
+	Parameter DATA_W bound to: 32 - type: integer 
+	Parameter K bound to: 4 - type: integer 
+	Parameter S bound to: 16 - type: integer 
+	Parameter N bound to: 10 - type: integer 
+	Parameter data_info bound to: 40 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'comparator' (2#1) [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/circuit.v:42]
+WARNING: [Synth 8-3936] Found unconnected internal register 'nb_list_aux_reg' and it is trimmed from '160' to '128' bits. [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/circuit.v:97]
+INFO: [Synth 8-6155] done synthesizing module 'calc_insert' (3#1) [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/circuit.v:64]
+WARNING: [Synth 8-689] width (160) of port connection 'nb_list' does not match port width (128) of module 'calc_insert' [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/top_circuit.v:53]
+INFO: [Synth 8-6157] synthesizing module 'control_unit' [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/control_unit.v:4]
+	Parameter state0 bound to: 0 - type: integer 
+	Parameter state1 bound to: 1 - type: integer 
+	Parameter state2 bound to: 2 - type: integer 
+	Parameter state3 bound to: 3 - type: integer 
+	Parameter state4 bound to: 4 - type: integer 
+INFO: [Synth 8-6155] done synthesizing module 'control_unit' (4#1) [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/control_unit.v:4]
+INFO: [Synth 8-6155] done synthesizing module 'top_circuit' (5#1) [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/top_circuit.v:5]
+INFO: [Synth 8-6155] done synthesizing module 'iob_knn' (6#1) [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/iob_knn.v:6]
+WARNING: [Synth 8-3331] design comparator has unconnected port B[7]
+WARNING: [Synth 8-3331] design comparator has unconnected port B[6]
+WARNING: [Synth 8-3331] design comparator has unconnected port B[5]
+WARNING: [Synth 8-3331] design comparator has unconnected port B[4]
+WARNING: [Synth 8-3331] design comparator has unconnected port B[3]
+WARNING: [Synth 8-3331] design comparator has unconnected port B[2]
+WARNING: [Synth 8-3331] design comparator has unconnected port B[1]
+WARNING: [Synth 8-3331] design comparator has unconnected port B[0]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[31]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[30]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[29]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[28]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[27]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[26]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[25]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[24]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[23]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[22]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[21]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[20]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[19]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[18]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[17]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[16]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[15]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[14]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[13]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[12]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[11]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[10]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[9]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[8]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[7]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[6]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[5]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[4]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[3]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[2]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[1]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port test_point[0]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[31]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[30]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[29]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[28]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[27]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[26]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[25]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[24]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[23]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[22]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[21]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[20]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[19]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[18]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[17]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[16]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[15]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[14]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[13]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[12]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[11]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[10]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[9]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[8]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[7]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[6]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[5]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[4]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[3]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[2]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[1]
+WARNING: [Synth 8-3331] design calc_distances has unconnected port data_point[0]
+WARNING: [Synth 8-3331] design calc_insert has unconnected port enable[0]
+---------------------------------------------------------------------------------
+Finished Synthesize : Time (s): cpu = 00:00:11 ; elapsed = 00:00:15 . Memory (MB): peak = 1697.367 ; gain = 277.363 ; free physical = 187 ; free virtual = 2397
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:12 ; elapsed = 00:00:16 . Memory (MB): peak = 1697.367 ; gain = 277.363 ; free physical = 185 ; free virtual = 2394
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7a35tcpg236-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:12 ; elapsed = 00:00:16 . Memory (MB): peak = 1705.371 ; gain = 285.367 ; free physical = 193 ; free virtual = 2393
+---------------------------------------------------------------------------------
+INFO: [Device 21-403] Loading part xc7a35tcpg236-1
+INFO: [Synth 8-802] inferred FSM for state register 'current_state_reg' in module 'control_unit'
+WARNING: [Synth 8-327] inferring latch for variable 'nbregin_reg[3]' [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/circuit.v:111]
+WARNING: [Synth 8-327] inferring latch for variable 'nbregin_reg[2]' [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/circuit.v:111]
+WARNING: [Synth 8-327] inferring latch for variable 'nbregin_reg[1]' [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/circuit.v:111]
+WARNING: [Synth 8-327] inferring latch for variable 'nbregin_reg[0]' [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/circuit.v:111]
+WARNING: [Synth 8-327] inferring latch for variable 'start_cnt_aux_reg' [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/control_unit.v:32]
+WARNING: [Synth 8-327] inferring latch for variable 'FSM_sequential_next_state_reg' [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/control_unit.v:55]
+WARNING: [Synth 8-327] inferring latch for variable 'FSM_onehot_next_state_reg' [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/control_unit.v:55]
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                  state0 |                            00001 |                              000
+                  state1 |                            00010 |                              001
+                  state2 |                            00100 |                              010
+                  state3 |                            01000 |                              011
+                  state4 |                            10000 |                              100
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'current_state_reg' using encoding 'one-hot' in module 'control_unit'
+WARNING: [Synth 8-327] inferring latch for variable 'FSM_onehot_next_state_reg' [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/control_unit.v:55]
+WARNING: [Synth 8-327] inferring latch for variable 'en_nb_aux_reg' [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/control_unit.v:30]
+WARNING: [Synth 8-327] inferring latch for variable 'inc_cnt_aux_reg' [/home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/control_unit.v:36]
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:13 ; elapsed = 00:00:17 . Memory (MB): peak = 1721.387 ; gain = 301.383 ; free physical = 150 ; free virtual = 2354
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+No constraint files found.
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Registers : 
+	               40 Bit    Registers := 4     
+	               32 Bit    Registers := 3     
+	                8 Bit    Registers := 1     
+	                1 Bit    Registers := 3     
++---Muxes : 
+	   4 Input     40 Bit        Muxes := 1     
+	   2 Input     40 Bit        Muxes := 6     
+	   2 Input     32 Bit        Muxes := 1     
+	   5 Input      5 Bit        Muxes := 1     
+	   2 Input      5 Bit        Muxes := 3     
+	   5 Input      3 Bit        Muxes := 1     
+	   3 Input      1 Bit        Muxes := 2     
+	   2 Input      1 Bit        Muxes := 8     
+	   5 Input      1 Bit        Muxes := 6     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Hierarchical Component Statistics 
+---------------------------------------------------------------------------------
+Hierarchical RTL Component detection 
+Module iob_knn 
+File: /home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/iob_knn.v 
+Found Register "ready_int_reg" of size 1-bit
+Found Register "KNN_RESET_reg" of size 1-bit
+Found Register "TESTP_reg" of size 32-bit
+Found Register "DATAP_REG_reg" of size 32-bit
+Found Register "LABEL_REG_reg" of size 8-bit
+Found Register "KNN_ENABLE_reg" of size 1-bit
+Module comparator 
+File: /home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/circuit.v 
+Found Comparator "C0" of operand size {32 Bit, 32 Bit} at Line:59
+Module calc_insert 
+File: /home/laisa/Documents/new_knn/iob-soc-knn/submodules/KNN/hardware/src/circuit.v 
+Found Register "genblk1[3].nbregout_reg[3]" of size 40-bit
+Found Register "genblk1[2].nbregout_reg[2]" of size 40-bit
+Found Register "genblk1[1].nbregout_reg[1]" of size 40-bit
+Found Register "genblk1[0].nbregout_reg[0]" of size 40-bit
+Found Comparator "cnt1" of operand size {<const>, 16 Bit} at Line:117
+Found Register "dist_out_reg" of size 32-bit
+Found Comparator "(null)" of operand size {<const>, 16 Bit} at Line:133
+Found Comparator "(null)" of operand size {<const>, 16 Bit} at Line:133
+Found Comparator "(null)" of operand size {<const>, 16 Bit} at Line:133
+Hierarchical RTL Component report 
+Module iob_knn 
+Detailed RTL Component Info : 
++---Registers : 
+	               32 Bit    Registers := 2     
+	                8 Bit    Registers := 1     
+	                1 Bit    Registers := 3     
++---Muxes : 
+	   2 Input     32 Bit        Muxes := 1     
+Module calc_insert 
+Detailed RTL Component Info : 
++---Registers : 
+	               40 Bit    Registers := 4     
+	               32 Bit    Registers := 1     
++---Muxes : 
+	   4 Input     40 Bit        Muxes := 1     
+	   2 Input     40 Bit        Muxes := 6     
+	   3 Input      1 Bit        Muxes := 2     
+	   2 Input      1 Bit        Muxes := 4     
+Module control_unit 
+Detailed RTL Component Info : 
++---Muxes : 
+	   5 Input      5 Bit        Muxes := 1     
+	   2 Input      5 Bit        Muxes := 3     
+	   5 Input      3 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 4     
+	   5 Input      1 Bit        Muxes := 6     
+---------------------------------------------------------------------------------
+Finished RTL Hierarchical Component Statistics
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+INFO: [Common 17-41] Interrupt caught. Command should exit soon.
+INFO: [Common 17-41] Interrupt caught. Command should exit soon.
+Part Resources:
+DSPs: 90 (col length:60)
+BRAMs: 100 (col length: RAMB18 60 RAMB36 30)
+1
+INFO: [Common 17-83] Releasing license: Synthesis
+19 Infos, 85 Warnings, 0 Critical Warnings and 1 Errors encountered.
+synth_design failed
+INFO: [Common 17-344] 'source' was cancelled
+INFO: [Common 17-206] Exiting Vivado at Sat Jan  2 16:57:23 2021...

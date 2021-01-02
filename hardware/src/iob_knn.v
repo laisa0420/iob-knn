@@ -7,7 +7,7 @@ module iob_knn
   #(
     parameter ADDR_W = `KNN_ADDR_W, //NODOC Address width
     parameter DATA_W = `DATA_W, //NODOC Data word width
-    parameter WDATA_W = `KNN_WDATA_W, //NODOC Data word width on writes
+    parameter WDATA_W = `DATA_W, //NODOC Data word width on writes
     parameter K = 4,
     parameter data_info = 40
     )
@@ -34,7 +34,7 @@ module iob_knn
    //
    //`SIGNAL_OUT(KNN_VALUE, 2*DATA_W)
 
-   top_circuit knn
+   top_circuit knn_core
      (
       .clk(clk),
       .rst(KNN_RESET),
@@ -44,7 +44,8 @@ module iob_knn
       .enable(KNN_ENABLE),
       .valid(valid),
       .wstrb(wstrb),
-      .nb_list(nb_list)
+      .nb_list(nb_list),
+      .saida(OUT_REG)
       );
    
    

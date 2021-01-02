@@ -14,7 +14,7 @@ module control_unit
 	 `INPUT(clk, 1),
 	 `INPUT(insert,1),
 	 `INPUT(valid, 1),
-	 `INPUT(wstrb, 1),
+	 `INPUT(wstrb, 4),
 	 `INPUT(cnt_flag, 1),
 	 `OUTPUT(en_dist, 1), 
 	 `OUTPUT(en_nb, 1), 

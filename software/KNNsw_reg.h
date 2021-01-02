@@ -6,3 +6,4 @@
 #define DATAP_REG 2
 #define TESTP 3
 #define LABEL_REG 4
+#define OUT_REG 5

@@ -6,6 +6,8 @@
 #include "random.h" //random generator for bare metal
 #include "interconnect.h"
 #include "KNNsw_reg.h"
+#include <time.h>
+#include <stdio.h>
 
 //uncomment to use rand from C lib 
 //#define cmwc_rand rand
@@ -34,7 +36,6 @@ static int base_knn;
 void knn_init( int base_address){
   base_knn=base_address;
 }
-
 
 //
 //Data structures
@@ -101,6 +102,10 @@ int main() {
 
   timer_reset(TIMER_BASE);
 
+  int k=0;
+  struct datum* data_IOSET;
+  char* data_label;
+
 
 
   //read current timer count, compute elapsed time
@@ -153,8 +158,6 @@ int main() {
   //start knn here
   knn_init(KNN_BASE);
   timer_init(TIMER_BASE);
-  int k=0;
-  int* data_IOSET;
 
   //for (k=0; k<M; k+= TP_ULIMIT){ //Tem o index do bloco de 50 TestPoints || bloco50[0] -- bloco50[1] (...)
 
@@ -178,28 +181,38 @@ int main() {
 
     IO_SET(base_knn, KNN_RESET, 1);
 
-    data_IOSET = (struct datum *) &(x[0]);
-    IO_SET(base_knn, TESTP, data_IOSET);
+    IO_SET(base_knn, KNN_ENABLE, 1);
+
+    unsigned short x_val = x[0].x;
+    unsigned short y_val = x[0].y;
+    unsigned int coord_test = (unsigned int)(x_val <<16) | (unsigned short)y_val; 
+    unsigned int coord_data;
+    char label_data;
+    
+    IO_SET(base_knn, TESTP, coord_test);
 
     IO_SET(base_knn, KNN_RESET, 0);
 
     //knn_start -- provavelmente distribuir do banco de registos para cada modulo
 
-    IO_SET(base_knn, KNN_ENABLE, 1);
 
     //Mandar 1 dataPoint de cada vez
     for(int d = 0; d<N; d++){
-        //ver a questão do label no hardware
-        data_IOSET = (struct datum *) &(data[d]);
-        IO_SET(base_knn,DATAP_REG,data_IOSET); // X Y LABEL lim 32 bits
-        data_IOSET = (unsigned char*) &(data[d].label);
-        IO_SET(base_knn,LABEL_REG,data_IOSET);
+      x_val = data[d].x;
+      y_val = data[d].y;
+      coord_data = (unsigned int)(x_val <<16) | (unsigned short)y_val; 
+      IO_SET(base_knn,DATAP_REG,coord_data); // X Y LABEL lim 32 bits
+      label_data = data[d].label;
+      IO_SET(base_knn,LABEL_REG,label_data);
     }
 
     //clear all votes
     int votes[C] = {0};
     int best_votation = 0;
     int best_voted = 0;
+
+    IO_GET(base_knn, OUT_REG);
+
 
     //make neighbours vote
     for (int j=0; j<K; j++) { //for all neighbors

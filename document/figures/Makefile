@@ -21,4 +21,3 @@ clean:
 	@rm -f *.pdf *~ $(TD_FIGS)
 
 .PHONY: all clean
-
