@@ -80,7 +80,9 @@ module calc_insert
      `INPUT(start_cnt,1),
      `INPUT(inc_cnt,1),
      `OUTPUT(insert, 1),
-     `OUTPUT(nb_list, K*DATA_W),
+     //marcio alterei dataw para datainfo
+     //`OUTPUT(nb_list, K*DATA_W),
+     `OUTPUT(nb_list, K*data_info),
      `OUTPUT(cnt_flag,1)
     );
 
@@ -128,10 +130,12 @@ module calc_insert
         nb_list_aux = {nb_list_aux, nbregout[j]};
 
         if (en_nb == 1) begin 
+            //marcio meti >= para inserir na ultima posiçao
             for (i = K-1; i > cnt ; i = i-1) begin
                 nbregin[i]  = nbregout[i-1];
                 nbregin[cnt] = {dist_out,label};
             end
+            nbregin[cnt] = {dist_out,label};
         end
         if (cnt == K-1) 
             cnt_flag_aux = 'b1;
@@ -140,6 +144,5 @@ module calc_insert
     end
     
 endmodule
-
 
 

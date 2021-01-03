@@ -182,14 +182,21 @@ int main() {
     IO_SET(base_knn, KNN_RESET, 1);
 
     IO_SET(base_knn, KNN_ENABLE, 1);
-
-    unsigned short x_val = x[0].x;
-    unsigned short y_val = x[0].y;
-    unsigned int coord_test = (unsigned int)(x_val <<16) | (unsigned short)y_val; 
+    
+    unsigned short x_val;
+    unsigned short y_val;
+    unsigned int coord_test[4];
+    for(int a = 0; a < 4; a++){
+      x_val = x[a].x;
+      y_val = x[a].y;
+      coord_test[a] = (unsigned int)(x_val <<16) | (unsigned short)y_val; 
+      //IO_SET(base_knn, BANK_TESTP0+a, coord_test[a]);
+    }
+    
     unsigned int coord_data;
     char label_data;
     
-    IO_SET(base_knn, TESTP, coord_test);
+    
 
     IO_SET(base_knn, KNN_RESET, 0);
 

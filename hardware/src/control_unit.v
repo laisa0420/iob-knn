@@ -86,8 +86,11 @@ module control_unit
 					inc_cnt_aux = 'b0;
 					next_state = state0;
 				end
-				else if (cnt_flag == 1)
+				else if (cnt_flag == 1)begin
 					next_state = state0;
+					//marcio meti o inc_cnt_aux = 'b0;
+					inc_cnt_aux = 'b0;
+				end
 				else begin
 					inc_cnt_aux = 'b1;	
 					next_state = state3;

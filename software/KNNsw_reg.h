@@ -3,7 +3,8 @@
 //register address mapping
 #define KNN_RESET 0
 #define KNN_ENABLE 1
-#define DATAP_REG 2
-#define TESTP 3
-#define LABEL_REG 4
-#define OUT_REG 5
+#define BANK_TESTP 2
+#define BANK_nb_list 3
+#define DATAP_REG 4
+#define LABEL_REG 5
+#define OUT_REG 6
