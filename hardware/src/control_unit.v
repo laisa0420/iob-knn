@@ -57,35 +57,41 @@ module control_unit
 			end
 			//data point
 			state1: begin 
+				start_cnt_aux = 'b1;
 				en_nb_aux = 'b0;
+				en_dist_aux ='b1;
+				start_cnt_aux = 'b1;
 				if (wstrb && valid)
 					next_state = state2;
 				else next_state = current_state;
 			end
 			//label e guarda a distancia
 			state2: begin 
-				start_cnt_aux = 'b1;
-				en_dist_aux ='b1;
-				if (wstrb && valid)
-					next_state = state3;
-				else next_state = current_state;
+				start_cnt_aux = 'b0;
+				en_dist_aux ='b0;
+				next_state = state3;
 			end
 			//compara
 			state3: begin 
-				start_cnt_aux = 'b0;
-				en_dist_aux ='b0;
+				if (insert)
+					inc_cnt_aux = 'b0;
+				else
+					inc_cnt_aux = 'b1;
 				next_state = state4;
 			end
 			//insere
 			state4: begin 
-				if (insert) begin
+				if (~inc_cnt_aux || insert ==1) begin
 					en_nb_aux = 'b1;
-					next_state = state1;
+					inc_cnt_aux = 'b0;
+					next_state = state0;
 				end
 				else if (cnt_flag == 1)
-					next_state = state1;
-				else 
-					inc_cnt_aux = 'b1;								
+					next_state = state0;
+				else begin
+					inc_cnt_aux = 'b1;	
+					next_state = state3;
+				end							
 			end
 
 			default : next_state = state0;

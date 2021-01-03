@@ -13,8 +13,7 @@ module calc_distances
     (
      `INPUT(test_point, DATA_W),
      `INPUT(data_point, DATA_W),
-     //`OUTPUT(dist, DATA_W)
-     output [DATA_W-1:0] old
+     `OUTPUT(result, DATA_W)
     );
 
     //Auxiliary signals
@@ -25,8 +24,7 @@ module calc_distances
 
     //Output signal conversion
     `SIGNAL(D,DATA_W)
-    assign old = 0;
-    //`SIGNAL2OUT(dist, D)
+    `SIGNAL2OUT(result, D)
 
    
     `COMB begin
