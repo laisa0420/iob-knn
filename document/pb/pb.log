@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.4)  4 JAN 2021 18:33
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.4)  4 JAN 2021 22:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -452,28 +452,19 @@ LaTeX Font Info:    Trying to load font information for TS1+phv on input line 2
 File: ts1phv.fd 2001/06/04 scalable font definitions for TS1/phv.
 )) (../benefits.tex)
 (../deliverables.tex) (../../submodules/TEX/document/bd.tex
-<../figures/bd.pdf, id=4, 853.58266pt x 512.1496pt>
+<../figures/bd.pdf, id=4, 598.13385pt x 422.52342pt>
 File: ../figures/bd.pdf Graphic file (type pdf)
 <use ../figures/bd.pdf>
 Package pdftex.def Info: ../figures/bd.pdf  used on input line 3.
-(pdftex.def)             Requested size: 236.84842pt x 142.10365pt.
-)
-Underfull \vbox (badness 1681) has occurred while \output is active []
-
-
-(../fpga.tex (../../submodules/TEX/document/fpga.tex
+(pdftex.def)             Requested size: 236.84842pt x 167.31076pt.
+) (../fpga.tex
+(../../submodules/TEX/document/fpga.tex
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 4.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 4.
- (./xil_results.tex
-! Extra alignment tab has been changed to \cr.
-<template> ... width\arrayrulewidth }\endtemplate 
-                                                  
-l.4 Registers                            &
-                                           1690  \\  \hline
-? 
-))) (../../submodules/TEX/document/disclaimer.tex
+ (./fpga_result.tex)))
+(../../submodules/TEX/document/disclaimer.tex
 <../figures/Logo.png, id=5, 94.10156pt x 103.88812pt>
 File: ../figures/Logo.png Graphic file (type png)
 <use ../figures/Logo.png>
@@ -531,10 +522,10 @@ Here is how much of TeX's memory you used:
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts
 /type1/urw/helvetic/uhvr8a.pfb>
-Output written on pb.pdf (1 page, 49551 bytes).
+Output written on pb.pdf (1 page, 58458 bytes).
 PDF statistics:
- 45 PDF objects out of 1000 (max. 8388607)
- 31 compressed objects within 1 object stream
+ 50 PDF objects out of 1000 (max. 8388607)
+ 34 compressed objects within 1 object stream
  4 named destinations out of 1000 (max. 500000)
  16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
