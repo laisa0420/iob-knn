@@ -186,19 +186,24 @@ int main() {
     unsigned short x_val;
     unsigned short y_val;
     unsigned int coord_test[4];
+    unsigned int address_tp = 0;
+    IO_SET(base_knn, KNN_RESET, 0);
     for(int a = 0; a < 4; a++){
       x_val = x[a].x;
       y_val = x[a].y;
+      //uart_printf("a=%d = %d %d\n",a,x_val,y_val);
+      
       coord_test[a] = (unsigned int)(x_val <<16) | (unsigned short)y_val; 
-      //IO_SET(base_knn, BANK_TESTP0+a, coord_test[a]);
+      //uart_printf("coordtest = %d\n\n",coord_test[a]);
+      address_tp = BANK_TESTP0+a;
+      IO_SET(base_knn, address_tp, coord_test[a]);
     }
-    
     unsigned int coord_data;
     char label_data;
     
     
-
-    IO_SET(base_knn, KNN_RESET, 0);
+    
+    IO_SET(base_knn, KNN_START, 1);
 
     //knn_start -- provavelmente distribuir do banco de registos para cada modulo
 
@@ -217,8 +222,10 @@ int main() {
     int votes[C] = {0};
     int best_votation = 0;
     int best_voted = 0;
+    int nb_list0 = 0;
 
-    IO_GET(base_knn, OUT_REG);
+    nb_list0 = IO_GET(base_knn, BANK_nb_list0);
+    uart_printf("%d\n",nb_list0);
 
 
     //make neighbours vote

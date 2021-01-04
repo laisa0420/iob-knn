@@ -11,6 +11,7 @@ module top_circuit
 	parameter data_info=40
 	)
 	(
+  `INPUT(knn_start, 1),
 	`INPUT(clk, 1),
 	`INPUT(rst, 1),
 	`INPUT(test_point, DATA_W),
@@ -19,8 +20,8 @@ module top_circuit
 	`INPUT(enable, 1),
 	`INPUT(valid, 1),
 	`INPUT(wstrb, 4),
-	`OUTPUT(nb_list, K*data_info),
-  `OUTPUT(saida, DATA_W)
+	`OUTPUT(nb_list, K*data_info)
+  //`OUTPUT(saida, DATA_W)
 	);
 
 	
@@ -30,11 +31,11 @@ module top_circuit
 	`SIGNAL_OUT(start_cnt,1)
 	`SIGNAL_OUT(inc_cnt,1)
 	`SIGNAL_OUT(cnt_flag,1)
-  `SIGNAL(saida_in, DATA_W)
-  `SIGNAL2OUT(saida, saida_in)
+  //`SIGNAL(saida_in, DATA_W)
+  //`SIGNAL2OUT(saida, saida_in)
 
-  `COMB
-  saida_in = 32'b1;
+  //`COMB
+  //saida_in = 32'b1;
 
 
  calc_insert test
@@ -56,6 +57,7 @@ module top_circuit
 
  control_unit control_tb
      (
+     .knn_start(knn_start),  
      .rst(rst),
      .clk(clk),
      .insert(insert),

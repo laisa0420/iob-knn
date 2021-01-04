@@ -39,28 +39,22 @@ module iob_knn
    /*alterações malta para generate muitos modulos*/
    genvar j;
   generate 
-    for (j = 0;j<K ;j = j+1 ) begin
-      
-    
-
-
-
-   /*final alterações*/
-
-   top_circuit knn_core
-     (
-      .clk(clk),
-      .rst(KNN_RESET),
-      .test_point(BANK_TESTP[j]),
-      .data_point(DATAP_REG), 
-      .label(LABEL_REG),
-      .enable(KNN_ENABLE),
-      .valid(valid),
-      .wstrb(wstrb),
-      .nb_list(BANK_nb_list[j]),
-      .saida(OUT_REG)
-      );
-    end
+  for (j = 0;j<K ;j = j+1 ) begin
+    top_circuit knn_core
+        (
+        .knn_start(KNN_START),  
+        .clk(clk),
+        .rst(KNN_RESET),
+        .test_point(BANK_TESTP[j]),
+        .data_point(DATAP_REG), 
+        .label(LABEL_REG),
+        .enable(KNN_ENABLE),
+        .valid(valid),
+        .wstrb(wstrb),
+        .nb_list(BANK_nb_list[j])
+        //.saida(OUT_REG)
+        );
+        end
   endgenerate
    
    //ready signal   
