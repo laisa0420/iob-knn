@@ -7,4 +7,4 @@
 	url = git@github.com:IObundle/iob-interconnect.git
 [submodule "submodules/LIB"]
 	path = submodules/LIB
-	url = git@github.com:IObundle/iob-lib.git
+	url = git@github.com:marciomess/iob-lib.git
