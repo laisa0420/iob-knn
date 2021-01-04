@@ -7,10 +7,10 @@
 #define DATAP_REG 3
 #define LABEL_REG 4
 #define OUT_REG 5
-#define BANK_nb_list0 6
-#define BANK_nb_list1 7
-#define BANK_nb_list2 8
-#define BANK_nb_list3 9
+#define BANK_LABELS0 6
+#define BANK_LABELS1 7
+#define BANK_LABELS2 8
+#define BANK_LABELS3 9
 #define BANK_TESTP0 10
 #define BANK_TESTP1 11
 #define BANK_TESTP2 12

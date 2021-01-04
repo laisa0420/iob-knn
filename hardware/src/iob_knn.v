@@ -36,6 +36,12 @@ module iob_knn
 
 
 
+   wire [K*data_info-1:0] nb_list_regin [K-1:0];
+    //wire [K*data_info-1:0] nb_list_regout [K-1:0];
+    
+
+
+
    /*alterações malta para generate muitos modulos*/
    genvar j;
   generate 
@@ -51,10 +57,18 @@ module iob_knn
         .enable(KNN_ENABLE),
         .valid(valid),
         .wstrb(wstrb),
-        .nb_list(BANK_nb_list[j])
+        .nb_list(nb_list_regin[j])
         //.saida(OUT_REG)
         );
+        //`REG_RE(clk, rst, '1, 'b1, nb_list_regout[j],nb_list_regin[j])
+    labelconverter knn_coverter
+        (
+        .a_input(nb_list_regin[j]),
+        .b_output(BANK_LABELS[j])
+        );
+        
         end
+        
   endgenerate
    
    //ready signal   
@@ -69,3 +83,65 @@ module iob_knn
       
 endmodule
 
+
+
+  
+
+
+module labelconverter
+    #(
+    parameter DATA_W = 32,
+    parameter K=4,
+    parameter S=16,
+    parameter N=10,
+    parameter data_info=40
+    )
+    (
+     `INPUT(a_input, 160), //falta parametrizar 159:0
+     `OUTPUT(b_output,32) //8*4=32
+    );
+
+    wire [7:0] aux [K-1:0];
+    `SIGNAL(labels, K*8)
+    `SIGNAL2OUT(b_output,labels)
+
+     genvar x;
+     integer i;
+      generate
+        for (x = 0 ;x <K ;x=x+1) begin //NUMERO DE LABELS
+        //x=3 || x=2 || x=1
+          label_calculator get_label (a_input[((x+1)*data_info - 1) : (x*data_info)],aux[x]);
+          
+          //159:159-DATA_W cagar ->159-DATA_W-1:159-DATA_W-1-8        
+        end
+        //x=0
+    endgenerate
+    `COMB begin
+      for ( i = 0; i< K; i = i+1) begin
+        labels = {labels,aux[i]};
+      end
+    end 
+endmodule
+
+
+module label_calculator
+    #(
+    parameter DATA_W = 32,
+    parameter K=4,
+    parameter S=16,
+    parameter N=10,
+    parameter data_info=40
+    )
+    (
+     `INPUT(distance_input, data_info), //falta parametrizar 159:0
+     `OUTPUT(label_output,8) //8*4=32
+    );
+
+    `SIGNAL(aux, 8)
+    `SIGNAL2OUT(label_output,aux)
+
+    `COMB begin
+        aux = distance_input[(data_info - DATA_W - 1) : (data_info - DATA_W - 8)];
+    end 
+
+endmodule

@@ -77,6 +77,15 @@ void insert (struct neighbor element, unsigned int position) {
 
 }
 
+//// create MASK FUNCTION
+unsigned createMask(unsigned a, unsigned b)
+  {
+    unsigned r = 0;
+    for (unsigned i=a; i<=b; i++)
+    r |= 1 << i;
+  return r;
+  }
+
 /*
 void write_test_to_reg(struct datum point){
   int *data_out = (struct datum *) &point;
@@ -94,7 +103,7 @@ int main() {
 
   unsigned long long elapsed=0;
   unsigned int elapsedu=0;
-
+  int votes[M][C] = {0};
   //init uart and timer
   uart_init(UART_BASE, FREQ/BAUD);
   uart_printf("\nInit timer\n");
@@ -138,10 +147,12 @@ int main() {
 #endif
   
   //init test points
+  
   for (int k=0; k<M; k++) {
     x[k].x  = (short) cmwc_rand();
     x[k].y  = (short) cmwc_rand();
     //x[k].label will be calculated by the algorithm
+    //votes[k] = {0};
   }
 
 #ifdef DEBUG
@@ -219,17 +230,58 @@ int main() {
     }
 
     //clear all votes
-    int votes[C] = {0};
+    
     int best_votation = 0;
     int best_voted = 0;
-    int nb_list0 = 0;
+    unsigned labels_list[K]={0,0,0,0} ;    
+    unsigned tp_labels[K]={0,0,0,0};
+    int newlabel = 0;
 
-    nb_list0 = IO_GET(base_knn, BANK_nb_list0);
-    uart_printf("%d\n",nb_list0);
+
+    unsigned r = 0;
+
+    for (int d = 0; d < M; d++)
+    {
+      address_tp = BANK_LABELS0+d;
+      labels_list[d] = IO_GET(base_knn, address_tp);
+      //uart_printf("%d\n",labels_list[d]);
+
+      for (int i = 0; i < K; i++)
+      {
+        r = createMask(i*8,(i+1)*8-1);
+        tp_labels[i] = r & labels_list[d];
+        tp_labels[i] = tp_labels[i]>>(i*8);
+        ++votes[d][tp_labels[i]];
+        /*tp_labels[i] = labels_list[d] >> (8*K-(i+1)*8);
+        tp_labels[i] = tp_labels[i]<< i*8*K;*/
+         //uart_printf("r:%d\n",r);
+        //uart_printf("%d\n",tp_labels[i]);
+      }    
+      //uart_printf("\n");
+      
+      for (int i = 0; i < K; i++)
+      {
+        //uart_printf("votes[%d][%d] = %d\n",d,i,votes[d][i]);
+        if (votes[d][i]>best_votation)
+        {
+          best_votation = votes[d][i];
+          newlabel = i;
+        }  
+         
+      }
+      
+      
+      x[d].label = newlabel;
+      newlabel = 0;
+      best_votation = 0;
+      //uart_printf("test point %d label is: %d\n",d,x[d].label);
+    }
+
+
 
 
     //make neighbours vote
-    for (int j=0; j<K; j++) { //for all neighbors
+    /*for (int j=0; j<K; j++) { //for all neighbors
       if ( (++votes[data[neighbor[j].idx].label]) > best_votation ) {
         best_voted = data[neighbor[j].idx].label;
         best_votation = votes[best_voted];
@@ -239,7 +291,7 @@ int main() {
     x[k].label = best_voted;
 
     votes_acc[best_voted]++;
-    
+    */
 #ifdef DEBUG
     uart_printf("\n\nNEIGHBORS of x[%d]=(%d, %d):\n", k, x[k].x, x[k].y);
     uart_printf("K \tIdx \tX \tY \tDist \t\tLabel\n");

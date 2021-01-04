@@ -10,6 +10,6 @@
 `SWREG_R(OUT_REG,           32, 0)
 
 //adicionado
-`SWREG_BANKR(BANK_nb_list, 160,0, 4) //DATA_W ; M
+`SWREG_BANKR(BANK_LABELS, 32,0, 4) //DATA_W ; M
 //adicionado
 `SWREG_BANKW(BANK_TESTP, 32,0, 4) //DATA_W ; M
