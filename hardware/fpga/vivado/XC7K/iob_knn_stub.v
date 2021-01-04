@@ -1,7 +1,7 @@
 // Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2019.2 (lin64) Build 2708876 Wed Nov  6 21:39:14 MST 2019
-// Date        : Mon Jan  4 16:12:58 2021
+// Date        : Mon Jan  4 18:15:11 2021
 // Host        : mess running 64-bit Linux Mint 20
 // Command     : write_verilog -force -mode synth_stub iob_knn_stub.v
 // Design      : iob_knn
